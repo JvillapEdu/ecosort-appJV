@@ -1,5 +1,7 @@
 import streamlit as st
 from ultralytics import YOLO
+from ultralytics import YOLO
+model = YOLO("yolov8n.pt")  
 import paho.mqtt.publish as publish
 
 # Configuración de la interfaz web
