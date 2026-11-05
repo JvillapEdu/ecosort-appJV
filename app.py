@@ -1,8 +1,7 @@
 import streamlit as st
-from ultralytics import YOLO
-from ultralytics import YOLO
-model = YOLO("yolov8n.pt")  
+from ultralytics import YOLO 
 import paho.mqtt.publish as publish
+model = YOLO("yolov8n.pt") 
 
 # Configuración de la interfaz web
 st.set_page_config(page_title="EcoSort - Asistente de Reconocimiento", page_icon="♻️", layout="centered")
