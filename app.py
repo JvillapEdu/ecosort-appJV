@@ -3,7 +3,7 @@ from ultralytics import YOLO
 import paho.mqtt.publish as publish
 
 # Configuración de la interfaz web
-st.set_page_config(page_title="EcoSort - Asistente IA", page_icon="♻️", layout="centered")
+st.set_page_config(page_title="EcoSort - Asistente de Reconocimiento", page_icon="♻️", layout="centered")
 
 st.title("♻️ EcoSort: Clasificador Inteligente de Residuos")
 st.write("Sube una foto o usa tu cámara para identificar el residuo y enviar la orden inmediata al contenedor físico (Wokwi).")
@@ -49,17 +49,17 @@ if imagen_cargada is not None:
 
                 # Lógica de clasificación y envío por MQTT al Wokwi
                 if obj_name in ['bottle', 'cup', 'can', 'wine glass']:
-                    st.success("🟢 **Material Reciclable** -> Contenedor Verde (Plásticos/Latas)")
-                    publish.single("ecosort/actidad", "VERDE", hostname="broker.hivemq.com")
-                    st.toast("¡Señal enviada a Wokwi: VERDE!")
+                    st.success("⬜ **Material Reciclable** -> Contenedor Blanco (Plásticos/Latas)")
+                    publish.single("ecosort/actidad", "BLAN", hostname="broker.hivemq.com")
+                    st.toast("¡Señal enviada a Wokwi: BLAN!")
                 elif obj_name in ['apple', 'banana', 'orange', 'sandwich', 'carrot']:
-                    st.info("🔵 **Residuo Orgánico** -> Contenedor Azul (Restos orgánicos)")
+                    st.info("🟩 **Residuo Orgánico** -> Contenedor Verde (Restos orgánicos)")
+                    publish.single("ecosort/actidad", "VERDE", hostname="broker.hivemq.com")
+                    st.toast("¡Señal enviada a Wokwi: VERDE")
+                else:
+                    st.warning("🟦 **Residuo Ordinario** -> Contenedor Negro (No reciclable)")
                     publish.single("ecosort/actidad", "AZUL", hostname="broker.hivemq.com")
                     st.toast("¡Señal enviada a Wokwi: AZUL!")
-                else:
-                    st.warning("🔴 **Residuo Ordinario** -> Contenedor Rojo (No reciclable)")
-                    publish.single("ecosort/actidad", "ROJO", hostname="broker.hivemq.com")
-                    st.toast("¡Señal enviada a Wokwi: ROJO!")
                 break
             if detectado:
                 break
