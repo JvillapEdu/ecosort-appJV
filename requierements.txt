@@ -1,4 +1,6 @@
 streamlit
+torch
+torchvision
 ultralytics
 opencv-python-headless
 paho-mqtt
