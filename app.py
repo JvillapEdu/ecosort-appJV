@@ -1,7 +1,6 @@
 import streamlit as st
 from ultralytics import YOLO 
 import paho.mqtt.publish as publish
-model = YOLO("yolov8n.pt") 
 
 # Configuración de la interfaz web
 st.set_page_config(page_title="EcoSort - Asistente de Reconocimiento", page_icon="♻️", layout="centered")
@@ -48,17 +47,22 @@ if imagen_cargada is not None:
                 st.info(f"🔍 Objeto detectado: **{obj_name}** (Confianza: {conf:.2f})")
                 detectado = True
 
-                # Lógica de clasificación y envío por MQTT al Wokwi
+                # Lógica de clasificación, mensajes complementarios y envío por MQTT al Wokwi
                 if obj_name in ['bottle', 'cup', 'can', 'wine glass']:
                     st.success("⬜ **Material Reciclable** -> Contenedor Blanco (Plásticos/Latas)")
+                    st.markdown("💡 **Consejo de manejo:** Asegúrate de que los objetos no estén contaminados con comida o líquidos; dales un enjuague rápido con agua y aplástalos si es posible para optimizar espacio.")
                     publish.single("ecosort/actidad", "BLAN", hostname="broker.hivemq.com")
                     st.toast("¡Señal enviada a Wokwi: BLAN!")
+                    
                 elif obj_name in ['apple', 'banana', 'orange', 'sandwich', 'carrot']:
                     st.info("🟩 **Residuo Orgánico** -> Contenedor Verde (Restos orgánicos)")
+                    st.markdown("💡 **Consejo de manejo:** Estos restos son ideales para procesos de compostaje. Evita mezclarlos con plásticos, metales o aceites cocinados para mantener la calidad del abono.")
                     publish.single("ecosort/actidad", "VERDE", hostname="broker.hivemq.com")
-                    st.toast("¡Señal enviada a Wokwi: VERDE")
+                    st.toast("¡Señal enviada a Wokwi: VERDE!")
+                    
                 else:
                     st.warning("🟦 **Residuo Ordinario** -> Contenedor Negro (No reciclable)")
+                    st.markdown("💡 **Consejo de manejo:** Este material no es aprovechable en cadenas de reciclaje tradicionales. Intenta reducir su consumo o buscar alternativas reutilizables a futuro.")
                     publish.single("ecosort/actidad", "AZUL", hostname="broker.hivemq.com")
                     st.toast("¡Señal enviada a Wokwi: AZUL!")
                 break
