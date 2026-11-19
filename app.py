@@ -6,7 +6,7 @@ import paho.mqtt.publish as publish
 st.set_page_config(page_title="EcoSort - Asistente de Reconocimiento", page_icon="♻️", layout="centered")
 
 st.title("♻️ EcoSort: Clasificador Inteligente de Residuos")
-st.write("Sube una foto o usa tu cámara para identificar el residuo y enviar la orden inmediata al contenedor físico (Wokwi).")
+st.write("Sube una foto 📥 o usa tu cámara 📷 para identificar el residuo y enviar la orden inmediata al contenedor físico (Wokwi).")
 
 # Cargar el modelo YOLOv8 liviano (se descarga de forma automática la primera vez)
 @st.cache_resource
@@ -71,3 +71,5 @@ if imagen_cargada is not None:
         
         if not detectado:
             st.warning("No se reconoció un objeto claro. Intenta con mejor iluminación o acércate más.")
+
+st.write("@Jeremy Villa Patiño")
