@@ -5,9 +5,9 @@ import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 
 # Configuración de la interfaz web
-st.set_page_config(page_title="EcoSort - Asistente de Reconocimiento", page_icon="♻️", layout="centered")
+st.set_page_config(page_title="EcoOrden - Asistente de Reconocimiento", page_icon="♻️", layout="centered")
 
-st.title("♻️ EcoSort: Clasificador Inteligente de Residuos")
+st.title("♻️ EcoOrden: Clasificador Inteligente de Residuos")
 st.write("Sube una foto 📥 o usa tu cámara 📷 para identificar el residuo y enviar la orden inmediata al contenedor físico (Wokwi).")
 
 # Cargar el modelo YOLOv8 liviano (se descarga de forma automática la primera vez)
