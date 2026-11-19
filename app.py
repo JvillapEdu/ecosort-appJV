@@ -1,6 +1,8 @@
+import time
 import streamlit as st
 from ultralytics import YOLO 
 import paho.mqtt.publish as publish
+import paho.mqtt.client as mqtt
 
 # Configuración de la interfaz web
 st.set_page_config(page_title="EcoSort - Asistente de Reconocimiento", page_icon="♻️", layout="centered")
@@ -71,5 +73,48 @@ if imagen_cargada is not None:
         
         if not detectado:
             st.warning("No se reconoció un objeto claro. Intenta con mejor iluminación o acércate más.")
+if "confirmacion_wokwi" not in st.session_state:
+    st.session_state.confirmacion_wokwi = None
+
+def consultar_confirmacion_mqtt(broker="broker.hivemq.com", topic="ecosort/confirmacion", timeout=1.5):
+    resultado = {"payload": None}
+
+    def on_connect(client, userdata, flags, reason_code, properties=None):
+        client.subscribe(topic)
+
+    def on_message(client, userdata, msg):
+        resultado["payload"] = msg.payload.decode("utf-8", errors="ignore").strip()
+
+    # Compatible con paho-mqtt v2; si usas v1.x, quita CallbackAPIVersion.VERSION2
+    try:
+        client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+    except AttributeError:
+        client = mqtt.Client()
+
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.connect(broker, 1883, keepalive=10)
+    client.loop_start()
+    time.sleep(timeout)
+    client.loop_stop()
+    client.disconnect()
+    return resultado["payload"]
+
+st.divider()
+st.subheader("🔘 Confirmación desde Wokwi")
+
+if st.button("🔄 Comprobar confirmación del botón"):
+    with st.spinner("Consultando tópico ecosort/confirmacion..."):
+        msg_recibido = consultar_confirmacion_mqtt()
+        if msg_recibido:
+            st.session_state.confirmacion_wokwi = msg_recibido
+
+if st.session_state.confirmacion_wokwi == "CONFIRMADO":
+    st.success("✅ ¡Confirmación recibida desde Wokwi! El usuario validó la acción en el dispositivo.")
+    if st.button("Limpiar confirmación"):
+        st.session_state.confirmacion_wokwi = None
+        st.rerun()
+else:
+    st.info("⏳ Esperando confirmación del botón en Wokwi (pulsa el botón en el simulador y haz clic en *Comprobar confirmación del botón*).")
 
 st.write("@Jeremy Villa Patiño")
