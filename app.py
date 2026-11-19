@@ -115,6 +115,6 @@ if st.session_state.confirmacion_wokwi == "CONFIRMADO":
         st.session_state.confirmacion_wokwi = None
         st.rerun()
 else:
-    st.info("⏳ Esperando confirmación del botón en Wokwi (pulsa el botón en el simulador y haz clic en *Comprobar confirmación del botón*).")
+    st.info("⏳ Esperando confirmación del botón en Wokwi (haz clic en *Comprobar confirmación del botón* y mientras carga pulsa el botón).")
 
 st.write("@Jeremy Villa Patiño")
