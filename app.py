@@ -54,7 +54,7 @@ if imagen_cargada is not None:
                     publish.single("ecosort/actidad", "BLAN", hostname="broker.hivemq.com")
                     st.toast("¡Señal enviada a Wokwi: Reciclable!")
                     
-                elif obj_name in ['apple', 'banana', 'orange', 'sandwich', 'carrot']:
+                elif obj_name in ['apple', 'banana', 'orange', 'sandwich', 'carrot', 'potted plant', 'brocolli']:
                     st.info("🟩 **Residuo Orgánico** -> Contenedor Verde (Restos orgánicos)")
                     st.markdown("💡 **Consejo de manejo:** Estos restos son ideales para procesos de compostaje. Evita mezclarlos con plásticos, metales o aceites cocinados para mantener la calidad del abono.")
                     publish.single("ecosort/actidad", "VERDE", hostname="broker.hivemq.com")
